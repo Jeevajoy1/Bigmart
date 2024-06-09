@@ -18,3 +18,10 @@ class Cartdb(models.Model):
     productname=models.CharField(max_length=100,null=True,blank=True)
     quantity=models.IntegerField(null=True,blank=True)
     totalprice=models.IntegerField(null=True,blank=True)
+
+class Orderdb(models.Model):
+    order_username=models.CharField(max_length=100,null=True,blank=True)
+    email=models.EmailField(max_length=100,null=True,blank=True)
+    address=models.CharField(max_length=100,null=True,blank=True)
+    phone=models.IntegerField(null=True,blank=True)
+    bill=models.TextField(max_length=100,null=True,blank=True)
