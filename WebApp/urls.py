@@ -16,5 +16,8 @@ urlpatterns=[
     path('user_logout/',views.user_logout,name="user_logout"),
     path('save_cart/',views.save_cart,name="save_cart"),
     path('cart_page/',views.cart_page,name="cart_page"),
-    path('delete_item/<int:pid>/',views.delete_item,name="delete_item")
+    path('delete_item/<int:pid>/',views.delete_item,name="delete_item"),
+    path('checkout_page/',views.checkout_page,name="checkout_page"),
+    path('place_order/',views.place_order,name="place_order"),
+    path('save_order/',views.save_order,name="save_order")
 ]

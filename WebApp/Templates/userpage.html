@@ -7,8 +7,8 @@
 <body>
 <br>
 <br>
-    <div class="cont">
-        <form method="post" action="{% url 'userlogin' %}" name="myform1" onsubmit="return newfunction()">
+    <div class="cont" >
+        <form method="post" action="{% url 'userlogin' %}" name="myform1" onsubmit="return newfunction()" style="margin-left:100px">
             {% csrf_token %}
         <div class="form sign-in">
             <h2>Welcome</h2>
@@ -23,6 +23,8 @@
 
             <p class="forgot-pass">Forgot password?</p>
             <button type="submit" class="submit">Sign In</button>
+            <a href="{% url 'register' %}" style="margin-left:200px">Don't Have an Account</a>
+
 
         </div>
         </form>

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from Backend.models import Productdb,Catdb
-from WebApp.models import Contactdb,Registerdb,Cartdb
+from WebApp.models import Contactdb,Registerdb,Cartdb,Orderdb
 from django.contrib import messages
 
 # Create your views here.
@@ -22,6 +22,8 @@ def save_contact(request):
         mob=request.POST.get('mobile')
         obj=Contactdb(name=na,email=eml,message=msg,subject=sub,mobile=mob)
         obj.save()
+        messages.success(request, "Details Updated..Will Contact You Soon!..")
+
         return redirect(contact_page)
 def our_product(req):
     cat = Catdb.objects.all()
@@ -95,10 +97,17 @@ def cart_page(request):
     # uname from cartdb
     cat = Catdb.objects.all()
     data=Cartdb.objects.filter(uname=request.session['name'])
+    subtotal=0
+    shipping_charge=0
     total=0
     for d in data:
-        total+=d.totalprice
-    return render(request,"cartpage.html",{'data':data,'category':cat,'total':total})
+        subtotal+=d.totalprice
+    if subtotal>=500:
+        shipping_charge=50
+    else:
+        shipping_charge=100
+    total=subtotal+shipping_charge
+    return render(request,"cartpage.html",{'data':data,'category':cat,'subtotal':subtotal,'shipping_charge':shipping_charge,'total':total})
 
 def delete_item(request,pid):
     x=Cartdb.objects.filter(id=pid)
@@ -108,3 +117,32 @@ def delete_item(request,pid):
 
 def user_page(request):
     return render(request,"userpage.html")
+
+def checkout_page(request):
+    checkprod=Cartdb.objects.filter(uname=request.session['name'])
+    subtotal = 0
+    shipping_charge = 0
+    total = 0
+    for d in checkprod:
+        subtotal += d.totalprice
+    if subtotal >= 500:
+        shipping_charge = 50
+    else:
+        shipping_charge = 100
+    total = subtotal + shipping_charge
+    return render(request,"checkout.html",{'checkprod':checkprod,'subtotal':subtotal,'shipping_charge':shipping_charge,'total':total})
+
+
+def place_order(request):
+    return render(request,"place_order.html")
+
+def  save_order(request):
+    if request.method=="POST":
+        na=request.POST.get('order_username')
+        eml=request.POST.get('email')
+        add=request.POST.get('address')
+        pho=request.POST.get('phone')
+        bil=request.POST.get('bill')
+        obj=Orderdb(order_username=na,email=eml,address=add,phone=pho,bill=bil)
+        obj.save()
+        return redirect(place_order)
