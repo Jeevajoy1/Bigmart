@@ -25,3 +25,4 @@ class Orderdb(models.Model):
     address=models.CharField(max_length=100,null=True,blank=True)
     phone=models.IntegerField(null=True,blank=True)
     bill=models.TextField(max_length=100,null=True,blank=True)
+    totalprice=models.IntegerField(null=True,blank=True)

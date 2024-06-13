@@ -18,6 +18,6 @@ urlpatterns=[
     path('cart_page/',views.cart_page,name="cart_page"),
     path('delete_item/<int:pid>/',views.delete_item,name="delete_item"),
     path('checkout_page/',views.checkout_page,name="checkout_page"),
-    path('place_order/',views.place_order,name="place_order"),
+    path('payment_page/',views.payment_page,name="payment_page"),
     path('save_order/',views.save_order,name="save_order")
 ]

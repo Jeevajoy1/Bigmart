@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from Backend.models import Productdb,Catdb
 from WebApp.models import Contactdb,Registerdb,Cartdb,Orderdb
 from django.contrib import messages
+import razorpay
 
 # Create your views here.
 def home_page(req):
@@ -133,8 +134,18 @@ def checkout_page(request):
     return render(request,"checkout.html",{'checkprod':checkprod,'subtotal':subtotal,'shipping_charge':shipping_charge,'total':total})
 
 
-def place_order(request):
-    return render(request,"place_order.html")
+def payment_page(request):
+    customer=Orderdb.objects.order_by('-id').first()
+    payy=customer.totalprice
+    amount=int(payy*100)
+    payy_str=str(amount)
+    for i in payy_str:
+        print(i)
+    if request.method=="POST":
+        order_currency='INR'
+        client=razorpay.Client(auth=('rzp_test_X0BJqFLivgYBjG','gb7byiV7hdIxBL1LSDho6Yn0'))
+        payment=client.order.create({'amount':amount,'currency':order_currency,'payment_capture':'1'})
+    return render(request,"place_order.html",{'customer':customer,'payy':payy,'payy_str':payy_str})
 
 def  save_order(request):
     if request.method=="POST":
@@ -143,6 +154,7 @@ def  save_order(request):
         add=request.POST.get('address')
         pho=request.POST.get('phone')
         bil=request.POST.get('bill')
-        obj=Orderdb(order_username=na,email=eml,address=add,phone=pho,bill=bil)
+        tot=request.POST.get('totalprice')
+        obj=Orderdb(order_username=na,email=eml,address=add,phone=pho,bill=bil,totalprice=tot)
         obj.save()
-        return redirect(place_order)
+        return redirect(payment_page)
